@@ -9,7 +9,7 @@ namespace serviceone.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class LettersController : ControllerBase
+    public class CitiesController : ControllerBase
     {
         private static readonly char[] Letters = new[]
         {

@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
 namespace servicethree.Controllers
 {
@@ -22,11 +17,11 @@ namespace servicethree.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var numbersService = $"{Configuration["numbersServiceURL"]}/numbers";
-            var serviceOneResponseCall = await new HttpClient().GetStringAsync(numbersService);
-            var lettersService = $"{Configuration["lettersServiceURL"]}/letters";
-            var serviceTwoResponseCall = await new HttpClient().GetStringAsync(lettersService);
-            var mergedResponse = $"{serviceOneResponseCall}{serviceTwoResponseCall}";
+            var destinationService = $"{Configuration["destinationServiceURL"]}/destination";
+            var serviceOneResponseCall = await new HttpClient().GetStringAsync(destinationService);
+            var citiesService = $"{Configuration["citiesServiceURL"]}/cities";
+            var serviceTwoResponseCall = await new HttpClient().GetStringAsync(citiesService);
+            var mergedResponse = $"{serviceOneResponseCall}\n{serviceTwoResponseCall}";
             return Ok(mergedResponse);
         }
     }
