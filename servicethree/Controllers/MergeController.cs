@@ -17,11 +17,12 @@ namespace servicethree.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var destinationService = $"{Configuration["destinationServiceURL"]}/destination";
-            var serviceOneResponseCall = await new HttpClient().GetStringAsync(destinationService);
+            //var destinationService = $"{Configuration["destinationServiceURL"]}/destination";
+            //var serviceOneResponseCall = await new HttpClient().GetStringAsync(destinationService);
             var citiesService = $"{Configuration["citiesServiceURL"]}/cities";
             var serviceTwoResponseCall = await new HttpClient().GetStringAsync(citiesService);
-            var mergedResponse = $"{serviceOneResponseCall}\n{serviceTwoResponseCall}";
+            //var mergedResponse = $"{serviceOneResponseCall}\n{serviceTwoResponseCall}";
+            var mergedResponse = $"{serviceTwoResponseCall}";
             return Ok(mergedResponse);
         }
     }

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace serviceone.Controllers
@@ -11,17 +13,43 @@ namespace serviceone.Controllers
     [Route("[controller]")]
     public class CitiesController : ControllerBase
     {
-        private static readonly char[] Letters = new[]
+
+        private IConfiguration Configuration;
+        private ActionResult<string> city;
+
+        public CitiesController(IConfiguration configuration)
         {
-            'A','B', 'C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','X','Y','Z'
-        };
+            Configuration = configuration;
+        }
 
         [HttpGet]
-        public ActionResult<string> Get()
+        public async Task<IActionResult> Get()
         {
-            var rnd = new Random();
-            var returnIndex = rnd.Next(0, 25);
-            return Letters[returnIndex].ToString();
+            var destinationService = $"{Configuration["destinationServiceURL"]}/destination";
+            var serviceOneResponseCall = await new HttpClient().GetStringAsync(destinationService);
+            var city = "";
+
+            switch (serviceOneResponseCall)
+            {
+                case "America":
+                    city = "New York";
+                    break;
+                case "Greece":
+                    city = "Athens";
+                    break;
+                case "Italy":
+                    city = "Milan";
+                    break;
+                case "Spain":
+                    city = "Barcelona";
+                    break;
+                    //default:
+                    //break;
+            }
+            // var rnd = new Random();
+            //var returnIndex = rnd.Next(0, 25);
+            //return Letters[returnIndex].ToString();
+            return Ok($"{serviceOneResponseCall}\n{city}");
         }
     }
 }

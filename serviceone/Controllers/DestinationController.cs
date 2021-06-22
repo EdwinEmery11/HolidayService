@@ -13,7 +13,7 @@ namespace serviceone.Controllers
     {
         private static readonly string[] Countries = new[]
         {
-            "Spain","Italy","America","greece"
+            "Spain","Italy","America","Greece"
         };
 
         [HttpGet]
