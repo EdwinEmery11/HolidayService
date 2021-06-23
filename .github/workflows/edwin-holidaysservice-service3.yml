@@ -1,18 +1,18 @@
-name: Build and deploy .NET Core app to Windows WebApp edwin-holidays-service2
+name: Build and deploy .NET Core app to Linux WebApp edwin-holidaysservice-service3
 on:
   push:
     branches:
     - main
 env:
-  AZURE_WEBAPP_NAME: edwin-holidays-service2
-  AZURE_WEBAPP_PACKAGE_PATH: servicetwo/publish
-  AZURE_WEBAPP_PUBLISH_PROFILE: ${{ secrets.edwin_holidays_service2_5963 }}
+  AZURE_WEBAPP_NAME: edwin-holidaysservice-service3
+  AZURE_WEBAPP_PACKAGE_PATH: servicethree/publish
+  AZURE_WEBAPP_PUBLISH_PROFILE: ${{ secrets.edwin_holidaysservice_service3_494b }}
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 5.0.x
-  WORKING_DIRECTORY: servicetwo
+  WORKING_DIRECTORY: servicethree
 jobs:
   build-and-deploy:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET Core

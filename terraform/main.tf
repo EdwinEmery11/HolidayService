@@ -62,4 +62,19 @@ resource "azurerm_app_service" "holidayservice" {
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   app_service_plan_id = azurerm_app_service_plan.app-service-Holidays.id
+
+  app_settings = {
+
+    "CitiesServiceURL" = "https://edwin-holidaysservice-service2.azurewebsites.net"
+
+    "DestinationServiceURL" = "https://edwin-holidaysservice-service2.azurewebsites.netyes/"
+
+    "mergedServiceURL" = "https://edwin-holidaysservice-service3.azurewebsites.net/"
+
+  }
+  site_config {
+    dotnet_framework_version = "v5.0"
+    scm_type                 = "None"
+  }
+
 }
