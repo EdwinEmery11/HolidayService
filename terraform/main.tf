@@ -48,7 +48,7 @@ resource "azurerm_app_service_plan" "app-service-Holidays" {
   location            = azurerm_resource_group.rg.location
   kind                = "Linux"
   reserved            = true
-  
+
   #pricing tier
   sku {
     tier = "Basic"
@@ -68,9 +68,9 @@ resource "azurerm_app_service" "holidayservice" {
 
     "CitiesServiceURL" = "https://edwin-holidaysservice-service2.azurewebsites.net"
 
-    "DestinationServiceURL" = "https://edwin-holidaysservice-service2.azurewebsites.netyes/"
+    "DestinationServiceURL" = "https://edwin-holidaysservice-service1.azurewebsites.net"
 
-    "mergedServiceURL" = "https://edwin-holidaysservice-service3.azurewebsites.net/"
+    "mergedServiceURL" = "https://edwin-holidaysservice-service3.azurewebsites.net"
 
   }
   site_config {
