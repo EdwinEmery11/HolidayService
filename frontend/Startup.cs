@@ -16,13 +16,12 @@ namespace frontend
       public Startup(IWebHostEnvironment env)
         {
 
-           /* var builder = new ConfigurationBuilder()
+            var builder = new ConfigurationBuilder()
            .SetBasePath(env.ContentRootPath)
            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
            .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
-           */
         }
         public IConfiguration Configuration { get; }
 
@@ -31,7 +30,7 @@ namespace frontend
         {
             services.AddRouting(r => r.LowercaseUrls = true);
             services.AddControllersWithViews();
-           //S services.Configure<AppSettings>(options => Configuration.GetSection("AppSettings").Bind(options));
+            services.Configure<AppSettings>(options => Configuration.GetSection("AppSettings").Bind(options));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -20,8 +19,7 @@ namespace servicethree.Controllers
         {
             //var destinationService = $"{Configuration["destinationServiceURL"]}/destination";
             //var serviceOneResponseCall = await new HttpClient().GetStringAsync(destinationService);
-            // var citiesService = $"{Configuration["citiesServiceURL"]}/cities";
-            var citiesService = $"{Environment.GetEnvironmentVariable("citiesServiceURL")}/cities";
+            var citiesService = $"{Configuration["citiesServiceURL"]}/cities";
             var serviceTwoResponseCall = await new HttpClient().GetStringAsync(citiesService);
             //var mergedResponse = $"{serviceOneResponseCall}\n{serviceTwoResponseCall}";
             var mergedResponse = $"{serviceTwoResponseCall}";

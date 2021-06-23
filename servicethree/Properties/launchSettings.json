@@ -12,21 +12,17 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "swagger",
+      "launchUrl": "",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "DestinationServiceURL": "https://localhost:44397",
-        "CitiesServiceURL": "https://localhost:44306"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
     "servicethree": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "swagger",
+      "launchUrl": "",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "DestinationServiceURL": "https://localhost:44397",
-        "CitiesServiceURL": "https://localhost:44306"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "dotnetRunMessages": "true",
       "applicationUrl": "https://localhost:5001;http://localhost:5000"
