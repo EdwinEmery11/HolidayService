@@ -25,7 +25,8 @@ namespace serviceone.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var destinationService = $"{Configuration["destinationServiceURL"]}/destination";
+            //var destinationService = $"{Configuration["destinationServiceURL"]}/destination";
+            var destinationService = $"{Environment.GetEnvironmentVariable("destinationServiceURL")}/destination";
             var serviceOneResponseCall = await new HttpClient().GetStringAsync(destinationService);
             var city = "";
 
