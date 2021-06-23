@@ -158,4 +158,3 @@ jobs:
             cd "${{ env.FE_PACKAGE_PATH }}"
             az webapp up -n edwin-holidaysservice-frontend --os-type Linux --resource-group edwine-SFIAproject-2 --runtime "DOTNET|5.0"
             az webapp config appsettings set -g edwine-SFIAproject-2 -n edwin-holidaysservice-frontend --settings "@../../../.github/workflows/frontendSettings.json"
-© 2021 GitHub, Inc.
