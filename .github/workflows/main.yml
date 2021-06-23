@@ -1,0 +1,161 @@
+name: Build and deploy services
+
+# Controls when the action will run. 
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  CONFIGURATION: Release
+  DOTNET_CORE_VERSION: 5.0.x
+  FE_DIRECTORY: frontend
+  DESTINATION_DIRECTORY: serviceone
+  CITIES_DIRECTORY: servicetwo
+  MERGE_DIRECTORY: servicethree
+  TEST_DIRECTORY: tests
+  
+  FE_PACKAGE_PATH: frontend/publish
+  DESTINATION_PACKAGE_PATH: serviceone/publish
+  CITIES_PACKAGE_PATH: servicetwo/publish
+  MERGE_PACKAGE_PATH: servicethree/publish
+
+jobs:
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Test
+        run: echo 'Hello Test'
+        #run: dotnet test "${{ env.TEST_DIRECTORY }}" /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov
+
+  build-numbers-service:
+    runs-on: ubuntu-latest
+    needs: test
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
+      - name: Restore
+        run: dotnet restore "${{ env.DESTINATION_DIRECTORY }}"
+      - name: Build
+        run: dotnet build "${{ env.DESTINATION_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }}
+      - name: Publish
+        run: dotnet publish "${{ env.DESTINATION_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --output "${{ env.DESTINATION_PACKAGE_PATH }}"
+      - name: publish numbers service to Azure
+        run: az
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+      - name: Azure CLI script
+        uses: azure/CLI@v1
+        with:
+          azcliversion: 2.25.0
+          inlineScript: |
+            cd "${{ env.DESTINATION_PACKAGE_PATH }}"
+            az webapp up -n edwin-holidaysservice-service1 --os-type Linux --resource-group edwine-SFIAproject-2 --runtime "DOTNET|5.0"
+  build-letters-service:
+      runs-on: ubuntu-latest
+      needs: test
+      # Steps represent a sequence of tasks that will be executed as part of the job
+      steps:
+        # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+        - uses: actions/checkout@v2
+        - name: Setup .NET Core
+          uses: actions/setup-dotnet@v1
+          with:
+            dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
+        - name: Restore
+          run: dotnet restore "${{ env.CITIES_DIRECTORY }}"
+        - name: Build
+          run: dotnet build "${{ env.CITIES_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }}
+        - name: Publish
+          run: dotnet publish "${{ env.CITIES_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --output "${{ env.CITIES_PACKAGE_PATH }}"
+    
+        - name: publish numbers service to Azure
+          run: az
+        - name: Azure Login
+          uses: azure/login@v1
+          with:
+            creds: ${{ secrets.AZURE_CREDENTIALS }}
+      
+        - name: Azure CLI script
+          uses: azure/CLI@v1
+          with:
+            azcliversion: 2.25.0
+            inlineScript: |
+              cd "${{ env.CITIES_PACKAGE_PATH }}"
+              az webapp up -n edwin-holidaysservice-service2 --os-type Linux --resource-group edwine-SFIAproject-2 --runtime "DOTNET|5.0"
+ 
+  build-merge-service:
+    runs-on: ubuntu-latest
+    needs: test
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
+      - name: Restore
+        run: dotnet restore "${{ env.MERGE_DIRECTORY }}"
+      - name: Build
+        run: dotnet build "${{ env.MERGE_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }}
+      - name: Publish
+        run: dotnet publish "${{ env.MERGE_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --output "${{ env.MERGE_PACKAGE_PATH }}"
+      - name: publish numbers service to Azure
+        run: az
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+      - name: Azure CLI script
+        uses: azure/CLI@v1
+        with:
+          azcliversion: 2.25.0
+          inlineScript: |
+            cd "${{ env.MERGE_PACKAGE_PATH }}"
+            az webapp up -n edwin-holidaysservice-service3 --os-type Linux --resource-group edwine-SFIAproject-2 --runtime "DOTNET|5.0"
+            az webapp config appsettings set -g edwine-SFIAproject-2 -n edwin-holidaysservice-service3 --settings "@../../../.github/workflows/mergeSettings.json"
+  build-frontend-service:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
+      - name: Restore
+        run: dotnet restore "${{ env.FE_DIRECTORY }}"
+      - name: Build
+        run: dotnet build "${{ env.FE_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }}
+      - name: Publish
+        run: dotnet publish "${{ env.MERGE_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --output "${{ env.FE_PACKAGE_PATH }}"
+      - name: publish numbers service to Azure
+        run: az
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+      - name: Azure CLI script
+        uses: azure/CLI@v1
+        with:
+          azcliversion: 2.25.0
+          inlineScript: |
+            cd "${{ env.FE_PACKAGE_PATH }}"
+            az webapp up -n edwin-holidaysservice-frontend --os-type Linux --resource-group edwine-SFIAproject-2 --runtime "DOTNET|5.0"
+            az webapp config appsettings set -g edwine-SFIAproject-2 -n edwin-holidaysservice-frontend --settings "@../../../.github/workflows/frontendSettings.json"
+© 2021 GitHub, Inc.

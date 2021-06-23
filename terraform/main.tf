@@ -48,6 +48,7 @@ resource "azurerm_app_service_plan" "app-service-Holidays" {
   location            = azurerm_resource_group.rg.location
   kind                = "Linux"
   reserved            = true
+  
   #pricing tier
   sku {
     tier = "Basic"
@@ -75,6 +76,7 @@ resource "azurerm_app_service" "holidayservice" {
   site_config {
     dotnet_framework_version = "v5.0"
     scm_type                 = "None"
+
   }
 
 }
