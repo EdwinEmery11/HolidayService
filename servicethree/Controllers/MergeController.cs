@@ -21,7 +21,7 @@ namespace servicethree.Controllers
             //var destinationService = $"{Configuration["destinationServiceURL"]}/destination";
             //var serviceOneResponseCall = await new HttpClient().GetStringAsync(destinationService);
             //var citiesService = $"{Configuration["citiesServiceURL"]}/cities";
-            var citiesService = $"{Environment.GetEnvironmentVariable("citiesServiceURL")}/cities";
+            var citiesService = $"{Environment.GetEnvironmentVariable("CitiesServiceURL")}/cities";
             var serviceTwoResponseCall = await new HttpClient().GetStringAsync(citiesService);
             //var mergedResponse = $"{serviceOneResponseCall}\n{serviceTwoResponseCall}";
             var mergedResponse = $"{serviceTwoResponseCall}";
